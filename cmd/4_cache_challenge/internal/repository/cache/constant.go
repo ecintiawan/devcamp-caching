@@ -1,5 +1,6 @@
 package cache
 
 const (
-	cacheKey = "simulation:item:list"
+	cacheKey     = "simulation:item:list"
+	cacheKeyByID = "simulation:item:list:%d"
 )
