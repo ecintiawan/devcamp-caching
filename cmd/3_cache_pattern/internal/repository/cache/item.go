@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/ecintiawan/devcamp-caching/cmd/3_cache_pattern/internal/entity"
 	"github.com/ecintiawan/devcamp-caching/cmd/3_cache_pattern/internal/repository"
@@ -25,7 +26,6 @@ func NewItem(
 
 func (r *itemImpl) Get() ([]entity.Item, error) {
 	fmt.Println("getting data from cache")
-
 	var (
 		result []entity.Item
 	)
@@ -52,5 +52,5 @@ func (r *itemImpl) Set(items []entity.Item) error {
 		return err
 	}
 
-	return r.cache.Set(context.TODO(), cacheKey, string(val))
+	return r.cache.Setex(context.TODO(), cacheKey, string(val), 10*time.Second)
 }

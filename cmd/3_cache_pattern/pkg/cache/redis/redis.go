@@ -10,8 +10,7 @@ import (
 func NewRedis() Redis {
 	return &redisImpl{
 		client: redis.NewClient(&redis.Options{
-			Addr:     "127.0.0.1:6379",
-			Password: "some_password",
+			Addr: "127.0.0.1:6379",
 		}),
 	}
 }
