@@ -33,7 +33,7 @@ func (r *itemProxy) Get() ([]entity.Item, error) {
 		return result, err
 	}
 
-	_ = r.cache.Set(result)
+	go r.cache.Set(result)
 
 	return result, nil
 }
@@ -54,7 +54,7 @@ func (r *itemProxy) GetByID(id int) (entity.Item, error) {
 		return result, err
 	}
 
-	_ = r.cache.SetByID(id, result)
+	go r.cache.SetByID(id, result)
 
 	return result, nil
 }
@@ -65,7 +65,7 @@ func (r *itemProxy) Create(model entity.Item) error {
 		return err
 	}
 
-	_ = r.cache.Del()
+	go r.cache.Del()
 
 	return nil
 }
@@ -76,8 +76,10 @@ func (r *itemProxy) Update(model entity.Item) error {
 		return err
 	}
 
-	_ = r.cache.Del()
-	_ = r.cache.DelByID(model.ID)
+	go func() {
+		r.cache.Del()
+		r.cache.DelByID(model.ID)
+	}()
 
 	return nil
 }
