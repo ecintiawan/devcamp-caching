@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: simulation-postgres
+    environment:
+      POSTGRES_USER: some_user
+      POSTGRES_PASSWORD: some_password
+      POSTGRES_DB: some_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./schema:/docker-entrypoint-initdb.d
+      - simulation_database:/var/lib/postgresql/data
+    tty: true
+    restart: unless-stopped
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: simulation-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass some_password
+    volumes:
+      - simulation_redis:/data
+    restart: unless-stopped
+
+volumes:
+  simulation_database:
+    driver: local
+  simulation_redis:
+    driver: local

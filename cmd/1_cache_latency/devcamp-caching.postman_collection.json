@@ -1,0 +1,53 @@
+{
+	"info": {
+		"_postman_id": "ae77a32e-05df-4275-80ea-bbebbe5444e4",
+		"name": "devcamp-caching",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5057047"
+	},
+	"item": [
+		{
+			"name": "without cache",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:9000/items",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9000",
+					"path": [
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "with cache",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:9000/v2/items",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9000",
+					"path": [
+						"v2",
+						"items"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
