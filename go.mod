@@ -1,6 +1,6 @@
 module github.com/ecintiawan/devcamp-caching
 
-go 1.20
+go 1.17
 
 require (
 	github.com/go-chi/chi v1.5.5

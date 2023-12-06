@@ -22,6 +22,6 @@ func NewDB() DB {
 	}
 }
 
-func (d *dbImpl) Query(query string, args ...any) (*sql.Rows, error) {
+func (d *dbImpl) Query(query string, args ...interface{}) (*sql.Rows, error) {
 	return d.client.Query(query, args...)
 }

@@ -4,7 +4,7 @@ import "database/sql"
 
 type (
 	DB interface {
-		Query(query string, args ...any) (*sql.Rows, error)
+		Query(query string, args ...interface{}) (*sql.Rows, error)
 	}
 
 	dbImpl struct {
