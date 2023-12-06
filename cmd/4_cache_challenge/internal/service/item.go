@@ -22,16 +22,13 @@ func (s *itemImpl) GetItems() ([]entity.Item, error) {
 }
 
 func (s *itemImpl) GetItem(id int) (entity.Item, error) {
-	// TODO: implement
-	return entity.Item{}, nil
+	return s.repo.GetByID(id)
 }
 
 func (s *itemImpl) CreateItem(model entity.Item) error {
-	// TODO: implement
-	return nil
+	return s.repo.Create(model)
 }
 
 func (s *itemImpl) UpdateItem(model entity.Item) error {
-	// TODO: implement
-	return nil
+	return s.repo.Update(model)
 }

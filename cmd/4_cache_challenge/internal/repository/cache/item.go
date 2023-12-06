@@ -47,12 +47,30 @@ func (r *itemImpl) Get() ([]entity.Item, error) {
 }
 
 func (r *itemImpl) GetByID(id int) (entity.Item, error) {
-	// TODO: implement
-	return entity.Item{}, nil
+	fmt.Println("getting data from cache")
+	var (
+		result entity.Item
+	)
+
+	key := fmt.Sprintf(cacheKeyByID, id)
+	item, err := r.cache.Get(context.TODO(), key)
+	if err != nil {
+		return result, err
+	}
+	if item == "" {
+		return result, errors.New("cache miss")
+	}
+
+	err = json.Unmarshal([]byte(item), &result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
 }
 
-func (r *itemImpl) Set(items []entity.Item) error {
-	val, err := json.Marshal(items)
+func (r *itemImpl) Set(result []entity.Item) error {
+	val, err := json.Marshal(result)
 	if err != nil {
 		return err
 	}
@@ -61,16 +79,20 @@ func (r *itemImpl) Set(items []entity.Item) error {
 }
 
 func (r *itemImpl) SetByID(id int, result entity.Item) error {
-	// TODO: implement
-	return nil
+	val, err := json.Marshal(result)
+	if err != nil {
+		return err
+	}
+
+	key := fmt.Sprintf(cacheKeyByID, id)
+	return r.cache.Setex(context.TODO(), key, string(val), 10*time.Second)
 }
 
 func (r *itemImpl) Del() error {
-	// TODO: implement
-	return nil
+	return r.cache.Del(context.TODO(), cacheKey)
 }
 
 func (r *itemImpl) DelByID(id int) error {
-	// TODO: implement
-	return nil
+	key := fmt.Sprintf(cacheKeyByID, id)
+	return r.cache.Del(context.TODO(), key)
 }

@@ -23,9 +23,9 @@ func NewServer(
 func (s *Server) InitRoutesAndServe() {
 	r := chi.NewRouter()
 	r.Get("/items", s.handler.GetItems)
-	r.Get("/items/{id}", s.handler.GetItems)
-	r.Post("/items", s.handler.GetItems)
-	r.Put("/items/{id}", s.handler.GetItems)
+	r.Get("/items/{id}", s.handler.GetItem)
+	r.Post("/items", s.handler.CreateItem)
+	r.Put("/items/{id}", s.handler.UpdateItem)
 
 	// serve http
 	port := "9000"

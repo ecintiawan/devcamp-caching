@@ -42,16 +42,38 @@ func (r *itemImpl) Get() ([]entity.Item, error) {
 }
 
 func (r *itemImpl) GetByID(id int) (entity.Item, error) {
-	// TODO: implement
-	return entity.Item{}, nil
+	fmt.Println("getting data from DB")
+	var (
+		item entity.Item
+	)
+
+	if err := r.db.QueryRow("SELECT * FROM items WHERE id = $1 LIMIT 1", id).Scan(&item.ID, &item.Name); err != nil {
+		fmt.Println(err)
+		return item, err
+	}
+
+	return item, nil
 }
 
 func (r *itemImpl) Create(model entity.Item) error {
-	// TODO: implement
-	return nil
+	query := `
+		INSERT INTO items(name)
+		VALUES ($1)
+	`
+
+	_, err := r.db.Exec(query, model.Name)
+	fmt.Println(err)
+	return err
 }
 
 func (r *itemImpl) Update(model entity.Item) error {
-	// TODO: implement
-	return nil
+	query := `
+		UPDATE items
+		SET name = $1
+		WHERE id = $2
+	`
+
+	_, err := r.db.Exec(query, model.Name, model.ID)
+	fmt.Println(err)
+	return err
 }
