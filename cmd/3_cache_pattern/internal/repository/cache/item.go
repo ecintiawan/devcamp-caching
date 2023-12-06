@@ -15,7 +15,7 @@ type itemImpl struct {
 	cache redis.Redis
 }
 
-func NewURL(
+func NewItem(
 	cache redis.Redis,
 ) repository.ItemCache {
 	return &itemImpl{

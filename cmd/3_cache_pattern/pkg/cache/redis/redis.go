@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/redis/go-redis/v9"
+	"github.com/go-redis/redis/v8"
 )
 
 func NewRedis() Redis {
@@ -27,7 +27,7 @@ func (r *redisImpl) Set(ctx context.Context, key string, value string) (err erro
 }
 
 func (r *redisImpl) Setex(ctx context.Context, key string, value string, expiration time.Duration) (err error) {
-	err = r.client.SetEx(ctx, key, value, expiration).Err()
+	err = r.client.SetEX(ctx, key, value, expiration).Err()
 	return
 }
 
