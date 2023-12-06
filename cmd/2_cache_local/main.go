@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -70,7 +71,7 @@ func initDB() (*sql.DB, error) {
 }
 
 func initCache() {
-	// TODO: init cache
+	c = cache.New(5*time.Minute, 10*time.Minute)
 }
 
 func fetchItemsHandler(w http.ResponseWriter, r *http.Request) {
@@ -89,16 +90,22 @@ func fetchItemsHandler(w http.ResponseWriter, r *http.Request) {
 func fetchItemsWithCacheHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	// TODO: fetch from cache first
+	// fetch from cache first
+	items, err := fetchItemsFromCache()
+	if err == nil && items != nil {
+		json.NewEncoder(w).Encode(items)
+		return
+	}
 
 	// fetch from DB if cache miss
-	items, err := fetchItemsFromDB()
+	items, err = fetchItemsFromDB()
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
-	// TODO: set data fetched from DB to cache
+	// set data fetched from DB to cache
+	setItemsToCache(items)
 
 	json.NewEncoder(w).Encode(items)
 }
@@ -123,9 +130,17 @@ func fetchItemsFromDB() ([]Item, error) {
 }
 
 func fetchItemsFromCache() ([]Item, error) {
-	// TODO: implement function
+	items, found := c.Get(cacheKey)
+	if !found {
+		return nil, errors.New("cache miss")
+	}
 
-	return nil, nil
+	result, ok := items.([]Item)
+	if !ok {
+		return nil, errors.New("error parsing items")
+	}
+
+	return result, nil
 }
 
 func setItemsToCache(items []Item) {
